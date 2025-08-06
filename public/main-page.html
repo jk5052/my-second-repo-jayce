@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>감정 컴퓨팅 프로젝트</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #333;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .status {
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            text-align: center;
+            font-weight: bold;
+        }
+        .input-group {
+            margin-bottom: 20px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        textarea {
+            width: 100%;
+            height: 100px;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+        button {
+            background: #007bff;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        button:hover {
+            background: #0056b3;
+        }
+        .result {
+            margin-top: 20px;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 5px;
+            border-left: 4px solid #007bff;
+        }
+        .links {
+            margin-top: 30px;
+            text-align: center;
+        }
+        .links a {
+            display: inline-block;
+            margin: 10px;
+            padding: 10px 20px;
+            background: #28a745;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+        }
+        .links a:hover {
+            background: #1e7e34;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🧠 감정 컴퓨팅 프로젝트</h1>
+        
+        <div id="api-status" class="status">
+            🔄 API 상태 확인 중...
+        </div>
+        
+        <div class="input-group">
+            <label for="textInput">감정을 분석할 텍스트를 입력하세요:</label>
+            <textarea id="textInput" placeholder="예: 오늘 정말 기분이 좋아요! 새로운 프로젝트를 시작했거든요."></textarea>
+        </div>
+        
+        <button onclick="analyzeText()">감정 분석하기</button>
+        
+        <div id="result" class="result" style="display: none;">
+            <h3>분석 결과:</h3>
+            <div id="resultContent"></div>
+        </div>
+        
+        <div class="links">
+            <h3>다른 프로젝트 보기:</h3>
+            <a href="movie.html">🎬 3D 영화 감정 우주</a>
+            <a href="2d-explore.html">📊 2D 감정 탐색</a>
+            <a href="3d-explore.html">🌐 3D 감정 탐색</a>
+            <a href="../final_presentation/">🎯 최종 발표</a>
+        </div>
+    </div>
+
+    <!-- 개발 환경에서만 private 설정 로드 -->
+    <script>
+        // 로컬 개발 환경 감지
+        if (location.hostname === 'localhost' || location.hostname === '127.0.0.1' || location.hostname === '') {
+            const script = document.createElement('script');
+            script.src = '../private/config.js';
+            script.onerror = () => console.log('개발 설정 로드 실패 - 데모 모드로 실행');
+            document.head.appendChild(script);
+        }
+    </script>
+    
+    <!-- 메인 스크립트 -->
+    <script src="main.js"></script>
+    
+    <script>
+        // 감정 분석 실행 함수
+        async function analyzeText() {
+            const textInput = document.getElementById('textInput');
+            const resultDiv = document.getElementById('result');
+            const resultContent = document.getElementById('resultContent');
+            
+            const text = textInput.value.trim();
+            if (!text) {
+                alert('텍스트를 입력해주세요!');
+                return;
+            }
+            
+            // 로딩 표시
+            resultContent.innerHTML = '🔄 분석 중...';
+            resultDiv.style.display = 'block';
+            
+            try {
+                const result = await analyzeEmotion(text);
+                
+                resultContent.innerHTML = `
+                    <p><strong>응답:</strong> ${result.response}</p>
+                    <p><strong>모드:</strong> ${result.demo ? '데모 모드' : '실제 AI 분석'}</p>
+                    <p><strong>입력 텍스트:</strong> "${text}"</p>
+                `;
+                
+            } catch (error) {
+                resultContent.innerHTML = `
+                    <p style="color: red;"><strong>오류:</strong> ${error.message}</p>
+                `;
+            }
+        }
+        
+        // Enter 키로 분석 실행
+        document.getElementById('textInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter' && e.ctrlKey) {
+                analyzeText();
+            }
+        });
+    </script>
+</body>
+</html>

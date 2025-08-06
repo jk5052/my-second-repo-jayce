@@ -1,0 +1,42 @@
+# API 키와 민감한 정보
+private/
+*.key
+.env*
+config.js
+*.secret
+
+# Node.js
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# 시스템 파일
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# 로그 파일
+*.log
+logs/
+
+# 임시 파일
+*.tmp
+*.temp
+*~
+
+# IDE 설정
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# 빌드 결과물
+dist/
+build/
+*.min.js
+*.min.css

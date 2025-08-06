@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cleansing Emotional Data - Data Sheet</title>
+    <link href="https://fonts.googleapis.com/css2?family=Special+Elite&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: url('assets/images/background.jpg') center center/cover no-repeat;
+            background-attachment: fixed;
+            min-height: 100vh;
+            color: white;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .container {
+            position: relative;
+            z-index: 2;
+            width: 100vw;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        .header {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+            z-index: 10;
+        }
+
+        .main-title {
+            font-size: 4rem;
+            font-weight: bold;
+            text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.8);
+            margin-bottom: 20px;
+            letter-spacing: 3px;
+            font-family: 'Special Elite', 'Courier New', monospace;
+        }
+
+        .subtitle {
+            font-size: 1.4rem;
+            opacity: 0.9;
+            font-style: italic;
+            font-family: 'Special Elite', 'Courier New', monospace;
+        }
+
+        .floating-link {
+            position: absolute;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(5px);
+            border: 2px solid rgba(255, 255, 255, 0.5);
+            border-radius: 10px;
+            padding: 15px 20px;
+            color: white;
+            text-decoration: none;
+            font-family: 'Special Elite', 'Courier New', monospace;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            cursor: grab;
+            animation: float 6s ease-in-out infinite;
+            max-width: 250px;
+            text-align: center;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+            user-select: none;
+            pointer-events: all;
+            display: block;
+            opacity: 1;
+            z-index: 50;
+        }
+
+        .floating-link:hover {
+            transform: scale(1.05);
+            background: rgba(0, 0, 0, 0.8);
+            border-color: rgba(255, 255, 255, 0.6);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.5);
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+        }
+
+        .floating-link.dragging {
+            animation: none;
+            cursor: grabbing;
+            transform: scale(1.1);
+            box-shadow: 0 15px 50px rgba(0, 0, 0, 0.7);
+            z-index: 1000;
+        }
+
+        .floating-link h3 {
+            font-size: 1.2rem;
+            margin-bottom: 10px;
+            color: #ffffff;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+            font-family: 'Special Elite', 'Courier New', monospace;
+        }
+
+        .floating-link p {
+            font-size: 0.9rem;
+            line-height: 1.4;
+            opacity: 0.9;
+            margin-bottom: 8px;
+            font-family: 'Special Elite', 'Courier New', monospace;
+        }
+
+        .floating-link .source {
+            font-size: 0.8rem;
+            opacity: 0.7;
+            font-style: italic;
+            color: #cccccc;
+            font-family: 'Special Elite', 'Courier New', monospace;
+        }
+
+        .back-button {
+            position: fixed;
+            top: 30px;
+            left: 30px;
+            z-index: 100;
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(10px);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50px;
+            padding: 15px 25px;
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            font-family: 'Special Elite', 'Courier New', monospace;
+        }
+
+        .back-button:hover {
+            background: rgba(0, 0, 0, 0.8);
+            border-color: rgba(255, 255, 255, 0.5);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            25% { transform: translateY(-20px) rotate(1deg); }
+            50% { transform: translateY(-10px) rotate(-0.5deg); }
+            75% { transform: translateY(-15px) rotate(0.5deg); }
+        }
+
+        .floating-link:nth-of-type(1) { top: 15%; left: 10%; animation-delay: 0s; z-index: 50; }
+        .floating-link:nth-of-type(2) { top: 25%; right: 15%; left: auto; animation-delay: 1s; z-index: 50; }
+        .floating-link:nth-of-type(3) { top: 60%; left: 20%; animation-delay: 2s; z-index: 50; }
+        .floating-link:nth-of-type(4) { top: 70%; right: 25%; left: auto; animation-delay: 3s; z-index: 50; }
+        .floating-link:nth-of-type(5) { top: 40%; left: 60%; animation-delay: 4s; z-index: 50; }
+        .floating-link:nth-of-type(6) { top: 80%; left: 45%; animation-delay: 5s; z-index: 50; }
+
+        @media (max-width: 768px) {
+            .main-title {
+                font-size: 2.5rem;
+            }
+
+            .subtitle {
+                font-size: 1.1rem;
+            }
+
+            .floating-link {
+                max-width: 200px;
+                padding: 12px 15px;
+                font-size: 0.9rem;
+            }
+
+            .back-button {
+                top: 20px;
+                left: 20px;
+                padding: 12px 20px;
+                font-size: 0.9rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <a href="index.html" class="back-button">← Back to Eyes</a>
+    
+    <div class="container">
+        <div class="header">
+            <h1 class="main-title">Data Sheet</h1>
+            <p class="subtitle">Cleansing Emotional Data - Research & Documentation</p>
+        </div>
+    </div>
+
+    <a href="https://starts-prize.aec.at/en/cleaning-emotional-data/" target="_blank" class="floating-link">
+        <h3>STARTS Prize Documentation</h3>
+        <p>Official documentation from the STARTS Prize</p>
+        <p class="source">Source: Ars Electronica</p>
+    </a>
+
+    <a href="https://noorderlicht.com/en/whats-on/pixel-perceptions/cleaning-emotional-data" target="_blank" class="floating-link">
+        <h3>Noorderlicht Exhibition</h3>
+        <p>Pixel Perceptions showcase</p>
+        <p class="source">Source: Noorderlicht</p>
+    </a>
+
+    <a href="https://www.youtube.com/watch?v=O8MZo2SMK6o" target="_blank" class="floating-link">
+        <h3>Video Documentation</h3>
+        <p>Visual documentation and artist presentation</p>
+        <p class="source">Source: YouTube</p>
+    </a>
+
+    <a href="https://tanjawagner.com/works/elisa-giardina-papa-cleaning-emotional-data-2020/" target="_blank" class="floating-link">
+        <h3>Gallery Representation</h3>
+        <p>Professional gallery documentation</p>
+        <p class="source">Source: Tanja Wagner Gallery</p>
+    </a>
+
+    <a href="https://www.elisagiardinapapa.org/" target="_blank" class="floating-link">
+        <h3>Artist's Official Website</h3>
+        <p>Comprehensive portfolio and documentation</p>
+        <p class="source">Source: Artist's Website</p>
+    </a>
+
+    <a href="https://www.researchgate.net/figure/Elisa-Giardina-Papa-Technologies-of-Care-2016-Installation-view-XVI-Quadriennale_fig2_340067837" target="_blank" class="floating-link">
+        <h3>Academic Research</h3>
+        <p>Academic documentation and analysis</p>
+        <p class="source">Source: ResearchGate</p>
+    </a>
+
+    <script>
+        let isDragging = false;
+        let dragStartTime = 0;
+
+        // Add entrance animations and drag functionality for floating links
+        document.addEventListener('DOMContentLoaded', function() {
+            const links = document.querySelectorAll('.floating-link');
+
+            console.log('Found', links.length, 'floating links'); // Debug log
+
+            links.forEach((link, index) => {
+                // Make sure they're visible
+                link.style.opacity = '1';
+                link.style.display = 'block';
+                link.style.pointerEvents = 'all';
+
+                console.log('Setting up link', index, link.href); // Debug log
+
+                // Add drag functionality
+                setupDragFunctionality(link);
+            });
+        });
+
+        function setupDragFunctionality(link) {
+            let dragData = {
+                isDragging: false,
+                startX: 0,
+                startY: 0,
+                offsetX: 0,
+                offsetY: 0
+            };
+
+            // Mouse events
+            link.addEventListener('mousedown', function(e) {
+                e.preventDefault();
+                dragStartTime = Date.now();
+                dragData.isDragging = true;
+                dragData.startX = e.clientX;
+                dragData.startY = e.clientY;
+                dragData.offsetX = e.clientX - this.offsetLeft;
+                dragData.offsetY = e.clientY - this.offsetTop;
+                this.classList.add('dragging');
+                isDragging = true;
+            });
+
+            // Touch events for mobile
+            link.addEventListener('touchstart', function(e) {
+                e.preventDefault();
+                dragStartTime = Date.now();
+                const touch = e.touches[0];
+                dragData.isDragging = true;
+                dragData.startX = touch.clientX;
+                dragData.startY = touch.clientY;
+                dragData.offsetX = touch.clientX - this.offsetLeft;
+                dragData.offsetY = touch.clientY - this.offsetTop;
+                this.classList.add('dragging');
+                isDragging = true;
+            });
+
+            // Global mouse move
+            document.addEventListener('mousemove', function(e) {
+                if (dragData.isDragging) {
+                    e.preventDefault();
+                    const newX = e.clientX - dragData.offsetX;
+                    const newY = e.clientY - dragData.offsetY;
+
+                    // Keep within bounds
+                    const boundedX = Math.max(0, Math.min(window.innerWidth - 250, newX));
+                    const boundedY = Math.max(0, Math.min(window.innerHeight - 150, newY));
+
+                    link.style.left = boundedX + 'px';
+                    link.style.top = boundedY + 'px';
+                }
+            });
+
+            // Global touch move
+            document.addEventListener('touchmove', function(e) {
+                if (dragData.isDragging) {
+                    e.preventDefault();
+                    const touch = e.touches[0];
+                    const newX = touch.clientX - dragData.offsetX;
+                    const newY = touch.clientY - dragData.offsetY;
+
+                    // Keep within bounds
+                    const boundedX = Math.max(0, Math.min(window.innerWidth - 250, newX));
+                    const boundedY = Math.max(0, Math.min(window.innerHeight - 150, newY));
+
+                    link.style.left = boundedX + 'px';
+                    link.style.top = boundedY + 'px';
+                }
+            });
+
+            // Global mouse up
+            document.addEventListener('mouseup', function(e) {
+                if (dragData.isDragging) {
+                    dragData.isDragging = false;
+                    link.classList.remove('dragging');
+
+                    // Check if it was a click (short duration, minimal movement)
+                    const dragDuration = Date.now() - dragStartTime;
+                    const dragDistance = Math.sqrt(
+                        Math.pow(e.clientX - dragData.startX, 2) +
+                        Math.pow(e.clientY - dragData.startY, 2)
+                    );
+
+                    console.log('Mouse up - duration:', dragDuration, 'distance:', dragDistance); // Debug
+
+                    if (dragDuration < 300 && dragDistance < 15) {
+                        // It was a click, not a drag - open the link
+                        console.log('Opening link:', link.href); // Debug
+                        window.open(link.href, '_blank');
+                    }
+
+                    isDragging = false;
+                }
+            });
+
+            // Global touch end
+            document.addEventListener('touchend', function(e) {
+                if (dragData.isDragging) {
+                    dragData.isDragging = false;
+                    link.classList.remove('dragging');
+
+                    // Check if it was a tap
+                    const dragDuration = Date.now() - dragStartTime;
+                    if (dragDuration < 200) {
+                        window.open(link.href, '_blank');
+                    }
+
+                    isDragging = false;
+                }
+            });
+        }
+
+        // Handle window resize
+        window.addEventListener('resize', () => {
+            const links = document.querySelectorAll('.floating-link');
+            links.forEach(link => {
+                const x = Math.min(parseFloat(link.style.left), window.innerWidth - 250);
+                const y = Math.min(parseFloat(link.style.top), window.innerHeight - 150);
+                link.style.left = Math.max(0, x) + 'px';
+                link.style.top = Math.max(0, y) + 'px';
+            });
+        });
+
+        // Prevent context menu on right click
+        document.addEventListener('contextmenu', function(e) {
+            e.preventDefault();
+        });
+    </script>
+</body>
+</html>
